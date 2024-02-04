@@ -20,8 +20,7 @@ public class ElementaryTraining {
      * @return среднее значение для введенных чисел
      */
     public double averageValue(int firstValue, int secondValue) {
-        //TODO: implement it
-        return 0;
+        return (double) (firstValue + secondValue) / 2;
     }
 
     /**
@@ -34,8 +33,7 @@ public class ElementaryTraining {
      * @return сумма новых трех чисел
      */
     public double complicatedAmount(int firstValue, int secondValue, int thirdValue) {
-        //TODO: implement it
-        return 0;
+        return firstValue*2 + secondValue-3 + thirdValue*thirdValue;
     }
 
     /**
@@ -47,8 +45,7 @@ public class ElementaryTraining {
      * @return новое значение
      */
     public int changeValue(int value) {
-        //TODO: implement it
-        return value;
+        return value > 3 ? value + 10 : value - 10;
     }
 
     /**
