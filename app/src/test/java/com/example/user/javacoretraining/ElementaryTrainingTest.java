@@ -71,7 +71,7 @@ public class ElementaryTrainingTest {
         int expectedValue = 20;
         assertEquals(expectedValue, changedValue);
     }
-/*
+
     @Test
     public void swapNumbers_fiveDigitNumber() {
         int changedValue = elementaryTraining.swapNumbers(54301);
@@ -124,5 +124,5 @@ public class ElementaryTrainingTest {
         int changedValue = elementaryTraining.zeroEvenNumber(5);
         int expectedValue = 5;
         assertEquals(expectedValue, changedValue);
-    }*/
+    }
 }

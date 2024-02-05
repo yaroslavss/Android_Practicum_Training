@@ -1,5 +1,8 @@
 package com.example.user.javacoretraining.training;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Набор тренингов по работе с примитивными типами java.
  * <p>
@@ -59,8 +62,24 @@ public class ElementaryTraining {
      * @return новое число
      */
     public int swapNumbers(int value) {
-        //TODO: implement it
-        return 0;
+        if (value < 10)
+            return value;
+
+        String strValue = Integer.toString(value);
+        String regexp = "^(\\d{1})(\\d{0,3})(\\d{1})$";
+        Pattern pattern = Pattern.compile(regexp);
+        String resStr = "";
+        int resValue = 0;
+
+        Matcher matcher = pattern.matcher(strValue);
+
+        if (matcher.matches()) {
+            resStr = matcher.group(3) + matcher.group(2) + matcher.group(1);
+            resValue = Integer.parseInt(resStr);
+        } else
+            return 0;
+
+        return resValue;
     }
 
     /**
@@ -74,7 +93,24 @@ public class ElementaryTraining {
      * @return новое число
      */
     public int zeroEvenNumber(int value) {
-        //TODO: implement it
-        return 0;
+        if (value < 10)
+            return value;
+
+        String strValue = Integer.toString(value);
+        char[] chars = strValue.toCharArray();
+        StringBuilder resStr = new StringBuilder();
+
+        if (chars.length > 5)
+            return 0;
+
+        for (char aChar : chars) {
+            if (aChar % 2 == 0) {
+                resStr.append(0);
+            } else {
+                resStr.append(aChar);
+            }
+        }
+
+        return Integer.parseInt(resStr.toString());
     }
 }
