@@ -1,5 +1,7 @@
 package com.example.user.javacoretraining.training;
 
+import java.util.Arrays;
+
 /**
  * Набор тренингов по работе со строками в java.
  * <p>
@@ -22,8 +24,15 @@ public class StringsTraining {
      * элементов строки text
      */
     public String getOddCharacterString(String text) {
-        //TODO: implement it
-        return "";
+        StringBuilder sb = new StringBuilder();
+        char[] chars = text.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            if (i % 2 == 1)
+                sb.append(chars[i]);
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -37,8 +46,22 @@ public class StringsTraining {
      * вернуть пустой массив
      */
     public int[] getArrayLastSymbol(String text) {
-        //TODO: implement it
-        return new int[]{};
+        char[] chars = text.toCharArray();
+        int textLength = chars.length;
+
+        if (textLength == 0)
+            return new int[]{};
+
+        char lastSymbol = chars[textLength - 1];
+        int[] result = new int[textLength - 2];
+        int n = 0;
+
+        for (int i = 0; i < textLength - 1; i++) {
+            if (chars[i] == lastSymbol)
+                result[n++] = i;
+        }
+
+        return Arrays.copyOf(result, n);
     }
 
     /**
@@ -49,8 +72,14 @@ public class StringsTraining {
      * @return количество цифр в строке
      */
     public int getNumbersCount(String text) {
-        //TODO: implement it
-        return 0;
+        int result = 0;
+
+        for (char aChar : text.toCharArray()) {
+            if (Character.isDigit(aChar))
+                result++;
+        }
+
+        return result;
     }
 
     /**
@@ -61,8 +90,18 @@ public class StringsTraining {
      * @return текст, где цифры заменены словами
      */
     public String replaceAllNumbers(String text) {
-        //TODO: implement it
-        return text;
+        String[] digits = new String[]{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+        StringBuilder sb = new StringBuilder();
+
+        for (char aChar : text.toCharArray()) {
+            if (Character.isDigit(aChar)) {
+                sb.append(digits[aChar-48]); // ASCII value of '0' is 48
+            }
+            else
+                sb.append(aChar);
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -73,8 +112,16 @@ public class StringsTraining {
      * @return измененная строка
      */
     public String capitalReverse(String text) {
-        //TODO: implement it
-        return text;
+        StringBuilder sb = new StringBuilder();
+
+        for (char aChar : text.toCharArray()) {
+            if (Character.isUpperCase(aChar))
+                sb.append(Character.toLowerCase(aChar));
+            else
+                sb.append(Character.toUpperCase(aChar));
+        }
+
+        return sb.toString();
     }
 
 }
