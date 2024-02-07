@@ -2,6 +2,7 @@ package com.example.user.javacoretraining.collections;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,8 +28,12 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public List<T> collectionTask0(@NonNull List<T> firstList, @NonNull List<T> secondList) {
-        //TODO: implement it
-        return Collections.emptyList();
+        List<T> newList = new ArrayList<T>(firstList);
+        newList.addAll(secondList);
+
+        newList.sort(Collections.reverseOrder());
+
+        return newList;
     }
 
     /**
