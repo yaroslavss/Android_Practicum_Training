@@ -2,8 +2,10 @@ package com.example.user.javacoretraining.collections;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -44,8 +46,16 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public List<T> collectionTask1(@NonNull List<T> inputList) {
-        //TODO: implement it
-        return Collections.emptyList();
+        List<T> outputList = new ArrayList<T>();
+        List<T> tmpList = new ArrayList<T>();
+
+        for (T elem: inputList) {
+            outputList.add(elem);
+            outputList.addAll(tmpList);
+            tmpList.add(elem);
+        }
+
+        return outputList;
     }
 
     /**
@@ -57,8 +67,10 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public boolean collectionTask2(@NonNull List<T> firstList, @NonNull List<T> secondList) {
-        //TODO: implement it
-        return true;
+        HashSet<T> firstSet = new HashSet<T>(firstList);
+        HashSet<T> secondSet = new HashSet<T>(secondList);
+
+        return firstSet.equals(secondSet);
     }
 
     /**
@@ -73,8 +85,22 @@ public class CollectionsBlock<T extends Comparable> {
      * @throws NullPointerException если один из параметров null
      */
     public List<T> collectionTask3(@NonNull List<T> inputList, int n) {
-        //TODO: implement it
-        return Collections.emptyList();
+        if (inputList.isEmpty())
+            return Collections.emptyList();
+
+        ArrayDeque<T> deque = new ArrayDeque<>(inputList);
+
+        for (int i = 0; i < Math.abs(n); i++) {
+            if (n > 0) {
+                T elem = deque.removeLast();
+                deque.push(elem);
+            } else {
+                T elem = deque.removeFirst();
+                deque.offerLast(elem);
+            }
+        }
+
+        return new ArrayList<>(deque);
     }
 
     /**
@@ -89,8 +115,17 @@ public class CollectionsBlock<T extends Comparable> {
      */
     public List<String> collectionTask4(@NonNull List<String> inputList, @NonNull String a,
                                         @NonNull String b) {
-        //TODO: implement it
-        return Collections.emptyList();
+        if (b == null)
+            throw new NullPointerException();
+
+        List<String> newList = new ArrayList<String>(inputList);
+
+        for (int i = 0; i < newList.size(); i++) {
+            if (newList.get(i).equals(a))
+                newList.set(i, b);
+        }
+
+        return newList;
     }
 
     /*
