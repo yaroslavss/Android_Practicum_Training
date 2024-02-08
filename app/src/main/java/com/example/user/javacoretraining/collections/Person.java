@@ -29,4 +29,8 @@ public class Person {
     public int getBirthYear() {
         return birthYear;
     }
+
+    public String getFullName() {
+        return lastName + " " + firstName + " " + secondName;
+    }
 }

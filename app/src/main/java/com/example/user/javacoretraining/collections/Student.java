@@ -37,16 +37,25 @@ public class Student extends Person {
                 '}';
     }
 
-    public String getFullName() {
-        return super.getLastName() + " " + super.getFirstName() + " " + super.getSecondName();
-    }
-
     private String printGrades() {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<Course, Integer> entry : grades.entrySet()) {
             sb.append(entry.getKey()).append(":").append(entry.getValue()).append(",");
         }
         return sb.toString();
+    }
+
+    public double getAverageGrade() {
+        int sum = 0, n = 0;
+        double avg = 0;
+
+        for (Map.Entry<Course, Integer> entry : grades.entrySet()) {
+            sum += entry.getValue();
+            n++;
+        }
+        avg = (double) sum / n;
+
+        return avg;
     }
 
     public void addGrade(Course course, int grade) {
