@@ -99,3 +99,54 @@ class Task2 {
         return count;
     }
 }
+
+/*
+  III
+
+  Описать класс, представляющий треугольник. Предусмотреть методы для создания объектов,
+  вычисления площади, периметра и точки пересечения медиан.
+  Описать свойства для получения состояния объекта.
+ */
+class Point {
+    private final double x;
+    private final double y;
+
+    public Point(final double x, final double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+}
+
+class Triangle {
+
+    Point a;
+    Point b;
+    Point c;
+
+    public Triangle(Point a, Point b, Point c) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
+    // площадь
+    public double getArea() {
+        return Math.abs((a.getX() - c.getX()) * (b.getY() - a.getY()) - (a.getX() - b.getX()) * (c.getY() - a.getY())) /2;
+    }
+
+    // точка пересечения медиан
+    public Point getCentroid(){
+        double x = (a.getX() + b.getX() + c.getX()) / 3;
+        double y = (a.getY() + b.getY() + c.getY()) / 3;
+
+        return new Point(x, y);
+    }
+}
