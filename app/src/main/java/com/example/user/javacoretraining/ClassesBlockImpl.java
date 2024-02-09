@@ -83,12 +83,19 @@ class Task2 {
         }
     }
 
-    public int findNumberCount(int num) {
+    public int findUniqueNumbersCount() {
+        Collections.sort(array);
+
+        Integer num = null;
         int count = 0;
+
         for (int i = 0; i < size; i++) {
-            if (array.get(i) == num)
+            if (array.get(i).equals(num))
                 count++;
+            else
+                num = array.get(i);
         }
+
         return count;
     }
 }
