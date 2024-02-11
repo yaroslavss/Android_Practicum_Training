@@ -7,11 +7,11 @@ public class Person {
     private final String firstName;
     private final int birthYear;
 
-    public Person(String lastName, String firstName, String secondName, int birthday) {
+    public Person(String lastName, String firstName, String secondName, int birthYear) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.birthYear = birthday;
+        this.birthYear = birthYear;
     }
 
     public String getLastName() {

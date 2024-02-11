@@ -4,13 +4,18 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.user.javacoretraining.classes.Abonent;
 import com.example.user.javacoretraining.collections.Course;
 import com.example.user.javacoretraining.collections.Person;
 import com.example.user.javacoretraining.collections.Student;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +25,53 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    private void initStudents() {
+        class InnerStudentsClass {
+            private Set<Integer> getGroups() {
+                Set<Integer> groups = new HashSet<Integer>();
+                groups = studentList.stream()
+                        .map(Student::getGroup)
+                        .collect(Collectors.toSet());
+                return groups;
+            }
+
+            /*
+              Найдите средний балл каждой группы по каждому предмету.
+             */
+            public double averageGradeForGroup() {
+                Set<Integer> groups = getGroups();
+                double avgGrade = 0;
+                for (Integer group : groups) {
+                    for (int i = 0; i < studentList.size(); i++) {
+                        Student st = studentList.get(i);
+                        if (st.getGroup() == group) {
+                            avgGrade += st.getAverageGrade();
+                        }
+                    }
+                }
+                return avgGrade;
+            }
+
+            /*
+              Для каждой группы найдите лучшего с точки зрения успеваемости студента.
+             */
+            public Student bestGradedStudent() {
+                Set<Integer> groups = getGroups();
+                Student bestStudent = null;
+                for (Integer group : groups) {
+                    double avgGrade = averageGradeForGroup();
+                    for (int i = 0; i < studentList.size(); i++) {
+                        Student st = studentList.get(i);
+                        if (st.getGroup() == group && st.getAverageGrade() >= avgGrade) {
+                            bestStudent = st;
+                        }
+                    }
+                }
+                return bestStudent;
+            }
+        }
 
         Course c1 = new Course("Высшая алгебра");
         Course c2 = new Course("Аналитическая геометрия");
@@ -88,5 +140,43 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("!!! Oldest: " + oldest);
         System.out.println("!!! Youngest: " + youngest);
         System.out.println("!!! Best: " + best);
+    }
+
+    /*
+      V
+    */
+    private void initAbonents() {
+        Abonent a1 = new Abonent(
+                "Петров", "Петр", "Петрович", 1980,
+                123456789L, "Москва, Ломоносовский пр-т, д.1, кв.2",
+                "1234-1234-1234-1234", 1000, 500,
+                60, 120
+        );
+        Abonent a2 = new Abonent(
+                "Иванов", "Иван", "Иванович", 1992,
+                123456789L, "Москва, Ломоносовский пр-т, д.2, кв.1",
+                "4321-4321-4321-4321", 1500, 800,
+                0, 61
+        );
+
+        // Создать массив объектов данного класса.
+        Abonent[] abonents = new Abonent[]{a1, a2};
+
+        // Вывести сведения относительно абонентов, у которых время городских переговоров
+        // превышает заданное.
+        Arrays.stream(abonents)
+                .filter(a -> a.getCityCallTime() > Abonent.MAX_CITY_CALL_TIME)
+                .forEach(System.out::println);
+
+        // Сведения относительно абонентов, которые пользовались
+        // междугородной связью.
+        Arrays.stream(abonents)
+                .filter(a -> a.getLongDistanceCallTime() > 0)
+                .forEach(System.out::println);
+
+        // Список абонентов в алфавитном порядке.
+        Arrays.stream(abonents)
+                .sorted(Comparator.comparing(Person::getFullName))
+                .forEach(System.out::println);
     }
 }
