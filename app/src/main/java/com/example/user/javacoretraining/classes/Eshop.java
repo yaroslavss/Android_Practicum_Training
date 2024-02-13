@@ -20,7 +20,7 @@ public class Eshop {
     private List<Customer> bannedCustomers = new ArrayList<>();
     private Seller seller;
 
-    public static int orderId;
+    private static int orderId;
 
     public String getName() {
         return name;
@@ -41,6 +41,10 @@ public class Eshop {
     public Eshop(String name, Seller seller) {
         this.name = name;
         this.seller = seller;
+    }
+
+    public int generateId() {
+        return ++orderId;
     }
 
     /*
@@ -91,7 +95,7 @@ public class Eshop {
         }
 
         Order(int customerId) {
-            this.id = ++Eshop.orderId;
+            this.id = generateId();
             this.customerId = customerId;
         }
 

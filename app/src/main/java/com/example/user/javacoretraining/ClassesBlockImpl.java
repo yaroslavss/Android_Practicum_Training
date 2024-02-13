@@ -209,21 +209,21 @@ class Time {
     }
 
     public void setHour(int hour) throws Exception {
-        if (hour < 0 || hour > 24)
+        if (hour < 0 || hour > 23)
             throw new Exception("Wrong hour");
         else
             time = LocalTime.of(hour, time.getMinute(), time.getSecond());
     }
 
     public void setMinute(int minute) throws Exception {
-        if (minute < 0 || minute > 60)
+        if (minute < 0 || minute > 59)
             throw new Exception("Wrong minute");
         else
             time = LocalTime.of(time.getHour(), minute, time.getSecond());
     }
 
     public void setSecond(int second) throws Exception {
-        if (second < 0 || second > 60)
+        if (second < 0 || second > 59)
             throw new Exception("Wrong second");
         else
             time = LocalTime.of(time.getHour(), time.getMinute(), second);
@@ -251,5 +251,12 @@ class Time {
 
     public void minusSeconds(long seconds) {
         time = time.minusSeconds(seconds);
+    }
+
+    @Override
+    public String toString() {
+        return "Time{" +
+                "time=" + time +
+                '}';
     }
 }

@@ -25,6 +25,10 @@ public class Student extends Person {
         return group;
     }
 
+    public HashMap<Course, Integer> getGrades() {
+        return grades;
+    }
+
     @NonNull
     @Override
     public String toString() {

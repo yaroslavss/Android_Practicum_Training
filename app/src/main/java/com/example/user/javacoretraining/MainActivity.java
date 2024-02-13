@@ -12,8 +12,10 @@ import com.example.user.javacoretraining.collections.Student;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initStudents();
     }
 
     private void initStudents() {
         class InnerStudentsClass {
-            private Set<Integer> getGroups() {
+            public Set<Integer> getGroups() {
                 Set<Integer> groups = new HashSet<Integer>();
                 groups = studentList.stream()
                         .map(Student::getGroup)
@@ -38,38 +42,40 @@ public class MainActivity extends AppCompatActivity {
             }
 
             /*
-              Найдите средний балл каждой группы по каждому предмету.
+              Находит средний балл группы по каждому предмету по номеру группы.
              */
-            public double averageGradeForGroup() {
-                Set<Integer> groups = getGroups();
-                double avgGrade = 0;
-                for (Integer group : groups) {
-                    for (int i = 0; i < studentList.size(); i++) {
-                        Student st = studentList.get(i);
-                        if (st.getGroup() == group) {
-                            avgGrade += st.getAverageGrade();
-                        }
+            public HashMap<Course, Double> averageGradesForGroup(int group) {
+                HashMap<Course, Integer> totalGrades = new HashMap<>();
+                HashMap<Course, Integer> qnts = new HashMap<>();
+                HashMap<Course, Double> result = new HashMap<>();
+
+                for (Student student :
+                        studentList.stream().filter(st -> st.getGroup() == group).collect(Collectors.toList())) {
+
+                    for (Map.Entry<Course, Integer> entry : student.getGrades().entrySet()) {
+                        Course key = entry.getKey();
+                        totalGrades.put(key, totalGrades.getOrDefault(key, 0) + entry.getValue());
+                        qnts.put(key, qnts.getOrDefault(key, 0) + 1);
                     }
                 }
-                return avgGrade;
+
+                for (Map.Entry<Course, Integer> entry : totalGrades.entrySet()) {
+                    Course key = entry.getKey();
+                    result.put(key, (double) entry.getValue() / qnts.getOrDefault(key, 1));
+                }
+
+                return result;
             }
 
             /*
-              Для каждой группы найдите лучшего с точки зрения успеваемости студента.
+              Находит лучшего студента в группе по номеру группы
              */
-            public Student bestGradedStudent() {
-                Set<Integer> groups = getGroups();
-                Student bestStudent = null;
-                for (Integer group : groups) {
-                    double avgGrade = averageGradeForGroup();
-                    for (int i = 0; i < studentList.size(); i++) {
-                        Student st = studentList.get(i);
-                        if (st.getGroup() == group && st.getAverageGrade() >= avgGrade) {
-                            bestStudent = st;
-                        }
-                    }
-                }
-                return bestStudent;
+            public Student bestGradedStudentForGroup(int group) {
+                return studentList
+                        .stream()
+                        .filter(st -> st.getGroup() == group)
+                        .max(Comparator.comparing(Student::getAverageGrade))
+                        .orElse(null);
             }
         }
 
@@ -84,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 2001, 1, 1
         );
         st1.addGrade(c1, 5);
-        st1.addGrade(c2, 3);
-        st1.addGrade(c3, 3);
-        st1.addGrade(c4, 4);
+        st1.addGrade(c2, 1);
+        st1.addGrade(c3, 1);
+        st1.addGrade(c4, 1);
         st1.addGrade(c5, 5);
 
         Student st2 = new Student(
@@ -103,11 +109,11 @@ public class MainActivity extends AppCompatActivity {
                 "Арбузов", "Иван", "Иванович",
                 2003, 2, 2
         );
-        st1.addGrade(c1, 5);
-        st1.addGrade(c2, 4);
-        st1.addGrade(c3, 5);
-        st1.addGrade(c4, 4);
-        st1.addGrade(c5, 5);
+        st3.addGrade(c1, 5);
+        st3.addGrade(c2, 4);
+        st3.addGrade(c3, 5);
+        st3.addGrade(c4, 4);
+        st3.addGrade(c5, 5);
 
         studentList.add(st2);
         studentList.add(st1);
@@ -129,17 +135,26 @@ public class MainActivity extends AppCompatActivity {
                 .max(Comparator.comparing(Person::getBirthYear))
                 .orElse(null);
 
-        // get best student for group == 2
-        Student best = studentList
-                .stream()
-                .filter(st -> st.getGroup() == 2)
-                .max(Comparator.comparing(Student::getAverageGrade))
-                .orElse(null);
-
         System.out.println("!!! " + studentList);
         System.out.println("!!! Oldest: " + oldest);
         System.out.println("!!! Youngest: " + youngest);
-        System.out.println("!!! Best: " + best);
+
+        // Для каждой группы найдите лучшего с точки зрения успеваемости студента.
+        InnerStudentsClass innerStudentsClass = new InnerStudentsClass();
+        Set<Integer> groups = innerStudentsClass.getGroups();
+
+        for (Integer group : groups) {
+            System.out.println("!!! Group " + group + " best student is " + innerStudentsClass.bestGradedStudentForGroup(group));
+        }
+
+        // Найдите средний балл каждой группы по каждому предмету.
+        for (Integer group : groups) {
+            HashMap<Course, Double> avg = innerStudentsClass.averageGradesForGroup(group);
+            String mapAsString = avg.keySet().stream()
+                    .map(key -> key + "=" + avg.get(key))
+                    .collect(Collectors.joining(", ", "{", "}"));
+            System.out.println("!!! " + mapAsString);
+        }
     }
 
     /*
