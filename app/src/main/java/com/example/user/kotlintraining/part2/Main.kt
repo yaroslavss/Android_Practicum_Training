@@ -4,7 +4,7 @@ object Main {
 
     fun run() {
         // task 4
-        val user = User(1, "User 1", 25, Type.FULL)
+        val user = User(1, "User 1", 15, Type.FULL)
         println(user.startTime)
 
         Thread.sleep(2000)
@@ -22,8 +22,8 @@ object Main {
 
         // task 7
         val nameList = userList.map { it.name }
-        println("First name is '${nameList.getOrElse(0, {it})}'")
-        println("Last name is '${nameList.getOrElse(nameList.size - 1, {it})}'")
+        println("First name is '${nameList.first()}'")
+        println("Last name is '${nameList.last()}'")
 
         // task 9
         val authCallback = object : AuthCallback {
@@ -48,12 +48,12 @@ object Main {
       8. Создать функцию-расширение класса User, которая проверяет, что юзер старше 18 лет,
          и в случае успеха выводит в лог, а в случае неуспеха возвращает ошибку.
      */
-    fun User.isAdult(): Boolean {
+    fun User.isAdult(): Pair<Boolean, String> {
         return if (this.age > 18) {
             println("This user is older than 18: $this")
-            true
+            true to "Success"
         } else
-            false
+            false to "This user is too much young"
     }
 
     /*
@@ -65,7 +65,8 @@ object Main {
           В случае получения ошибки вызвать authFailed.
      */
     inline fun auth(user: User, callback: AuthCallback, operation: () -> Unit) {
-        if (user.isAdult()) {
+        val (status, message) = user.isAdult()
+        if (status) {
             callback.authSuccess()
             operation()
         } else
