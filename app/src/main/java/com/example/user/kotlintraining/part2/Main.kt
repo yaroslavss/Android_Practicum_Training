@@ -4,7 +4,7 @@ object Main {
 
     fun run() {
         // task 4
-        val user = User(1, "User 1", 15, Type.FULL)
+        val user = User(1, "User 1", 25, Type.FULL)
         println(user.startTime)
 
         Thread.sleep(2000)
@@ -25,22 +25,72 @@ object Main {
         println("First name is '${nameList.getOrElse(0, {it})}'")
         println("Last name is '${nameList.getOrElse(nameList.size - 1, {it})}'")
 
+        // task 9
+        val authCallback = object : AuthCallback {
+            override fun authSuccess() {
+                println("Authorized")
+            }
 
+            override fun authFailed() {
+                println("Not authorized")
+            }
+        }
 
+        // task 10, 11
+        val updateCache = { println("Cache updated") }
+        auth(user, authCallback, updateCache)
 
-
+        // task 13
+        doAction(Login(user, authCallback), updateCache)
     }
 
     /*
-      Создать функцию-расширение класса User, которая проверяет, что юзер старше 18 лет,
-      и в случае успеха выводит в лог, а в случае неуспеха возвращает ошибку.
+      8. Создать функцию-расширение класса User, которая проверяет, что юзер старше 18 лет,
+         и в случае успеха выводит в лог, а в случае неуспеха возвращает ошибку.
      */
-    fun User.isAdult(): String {
+    fun User.isAdult(): Boolean {
         return if (this.age > 18) {
             println("This user is older than 18: $this")
-            "Success"
+            true
+        } else
+            false
+    }
+
+    /*
+      10. Реализовать inline функцию auth, принимающую в качестве параметра функцию updateCache.
+          Функция updateCache должна выводить в лог информацию об обновлении кэша.
+
+      11. Внутри функции auth вызвать метод коллбека authSuccess и переданный updateCache,
+          если проверка возраста пользователя произошла без ошибки.
+          В случае получения ошибки вызвать authFailed.
+     */
+    inline fun auth(user: User, callback: AuthCallback, operation: () -> Unit) {
+        if (user.isAdult()) {
+            callback.authSuccess()
+            operation()
+        } else
+            callback.authFailed()
+    }
+
+    /*
+      13. Реализовать метод doAction, принимающий экземпляр класса Action.
+          В зависимости от переданного действия выводить в лог текст,
+          к примеру “Auth started”. Для действия Login вызывать метод auth.
+     */
+    fun doAction(action: Action, operation: () -> Unit) {
+        when (action) {
+            is Registration -> {
+                println("Registration started")
+            }
+
+            is Login -> {
+                println("Auth started")
+                auth(action.user, action.authCallback, operation)
+            }
+
+            is Logout -> {
+                println("Logout started")
+            }
         }
-        else
-            "Error"
     }
 }
